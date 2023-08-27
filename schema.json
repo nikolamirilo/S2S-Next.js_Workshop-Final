@@ -1,11 +1,11 @@
 {
     "author": {
-        "username": "",
-        "photoURL": ""
+        "username": "mirilo.nikola",
+        "photoURL": "url"
     },
-    "location": "",
-    "image": "",
-    "title": "",
-    "subtitle": "",
-    "likes": 0
+    "location": "Belgrade",
+    "image": "img",
+    "title": "Tit",
+    "description": "Sub",
+    "likes": 20
 }

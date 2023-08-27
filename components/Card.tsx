@@ -4,18 +4,9 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { BiBookmark } from "react-icons/bi";
+import { CardProps } from "@/typescript/interfaces";
 
-export interface Props {
-  authorUsername: string;
-  authorImage: string;
-  location: string;
-  title: string;
-  description: string;
-  image: string;
-  likes: string;
-}
-
-const Card: React.FC<Props> = ({
+const Card: React.FC<CardProps> = ({
   authorUsername,
   authorImage,
   location,

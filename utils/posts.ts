@@ -1,0 +1,66 @@
+import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
+
+
+// Client
+export const clientConnection = async () => {
+  const client = await clientPromise;
+  const db = client.db("Instagram");
+  return db;
+};
+
+// Managing All Posts
+export const getAllPosts = async () => {
+    try {
+      const db = await clientConnection();
+      const allPosts: any = await db.collection("posts").find({}).toArray();
+      return allPosts;
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  };
+  export const deleteAllPosts = async () => {
+    try {
+      const db = await clientConnection();
+      db.collection("posts").deleteMany({});
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  };
+  // Managing Single Post
+  export const createPost = async (post: object) => {
+    try {
+      const db = await clientConnection();
+      await db.collection("posts").insertOne(post);
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  };
+  export const updateAction = async (_id: string, likes: number) => {
+    try {
+      const db = await clientConnection();
+      await db.collection("akcije").updateOne(
+        { _id: new ObjectId(_id) },
+        {
+          $set: {
+            likes: likes + 1,
+          },
+        }
+      );
+      return true;
+    } catch (error) {
+      console.log((error as Error).message);
+      return false;
+    }
+  };
+  export const getSignlePost= async (_id: any) => {
+    try {
+      const allPosts = await getAllPosts();
+      const singlePost: any = allPosts?.find(
+        (singlePost: any) => singlePost._id.toString() == _id
+      );
+      return singlePost;
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  };
