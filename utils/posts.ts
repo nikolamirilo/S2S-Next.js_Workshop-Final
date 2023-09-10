@@ -36,14 +36,14 @@ export const getAllPosts = async () => {
       console.log((error as Error).message);
     }
   };
-  export const updateAction = async (_id: string, likes: number) => {
+  export const updatePost = async (_id: string, likes:number) => {
     try {
       const db = await clientConnection();
-      await db.collection("akcije").updateOne(
+      await db.collection("posts").updateOne(
         { _id: new ObjectId(_id) },
         {
           $set: {
-            likes: likes + 1,
+            likes: likes,
           },
         }
       );
@@ -53,7 +53,7 @@ export const getAllPosts = async () => {
       return false;
     }
   };
-  export const getSignlePost= async (_id: any) => {
+  export const getSinglePost= async (_id: any) => {
     try {
       const allPosts = await getAllPosts();
       const singlePost: any = allPosts?.find(

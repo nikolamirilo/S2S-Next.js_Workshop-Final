@@ -1,4 +1,5 @@
 export interface CardProps {
+    _id: string;
     authorUsername: string;
     authorImage: string;
     location: string;

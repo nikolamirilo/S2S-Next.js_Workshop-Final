@@ -1,5 +1,4 @@
 "use client";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import React, { useReducer, useState } from "react";
 import logo from "../public/logo.png";
@@ -12,6 +11,7 @@ const Contribute: React.FC = () => {
     title: "",
     description: "",
     image: "",
+    likes: 0,
   };
   const [data, setData] = useReducer(
     (data: any, updates: any) => ({
@@ -35,17 +35,24 @@ const Contribute: React.FC = () => {
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
-    await fetch(`${process.env.WEB_APP_URL}/api/actions/addNew`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }).then((response) => {
+    await fetch(
+      `https://s2-s-next-js-workshop-final.vercel.app/api/posts/create-post`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    ).then((response) => {
       console.log(response);
       setData(initialData);
-      alert("Vas odgovor je zabelezen");
+      if (response.ok) {
+        alert("Vas odgovor je zabelezen");
+      } else {
+        console.log(response.statusText);
+      }
     });
   };
   return (
