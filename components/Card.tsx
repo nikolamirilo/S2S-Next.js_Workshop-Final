@@ -5,6 +5,7 @@ import { FaRegComment } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { BiBookmark } from "react-icons/bi";
 import { CardProps } from "@/typescript/interfaces";
+import { base_url } from "@/constants";
 
 const Card: React.FC<CardProps> = ({
   _id,
@@ -27,20 +28,17 @@ const Card: React.FC<CardProps> = ({
       setIsClicked(true);
       setCurrentLikes((prevLikes) => prevLikes + 1);
       try {
-        const res = await fetch(
-          `https://s2-s-next-js-workshop-final.vercel.app/api/posts/${_id}`,
-          {
-            method: "PUT",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              _id: _id,
-              likes: currentLikes + 1,
-            }),
-          }
-        );
+        const res = await fetch(`${base_url}/api/posts/${_id}`, {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            _id: _id,
+            likes: currentLikes + 1,
+          }),
+        });
         console.log(res);
       } catch (error) {
         console.log(error as Error);

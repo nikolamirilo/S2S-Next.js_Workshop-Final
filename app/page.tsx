@@ -1,12 +1,10 @@
 import Card from "@/components/Card";
+import { base_url } from "@/constants";
 
 async function getData() {
-  const res = await fetch(
-    "https://s2-s-next-js-workshop-final.vercel.app/api/posts",
-    {
-      cache: "no-store",
-    }
-  );
+  const res = await fetch(`${base_url}/api/posts`, {
+    cache: "no-store",
+  });
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
