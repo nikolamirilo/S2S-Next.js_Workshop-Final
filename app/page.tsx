@@ -1,7 +1,7 @@
 import Card from "@/components/Card";
 import { base_url } from "@/constants";
 
-async function getData() {
+async function getPosts() {
   const res = await fetch(`${base_url}/api/posts`, {
     cache: "no-store",
   });
@@ -12,10 +12,10 @@ async function getData() {
 }
 
 export default async function Home() {
-  const posts = await getData();
+  const posts = await getPosts();
   return (
     <main
-      className="flex w-full flex-col justify-center items-center py-20"
+      className="flex w-full flex-col justify-center items-center py-20 min-h-screen"
       id="home"
     >
       <section

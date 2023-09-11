@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React, { useReducer, useState } from "react";
 import logo from "../public/logo.png";
-import { base_url } from "@/constants";
 
 const Contribute: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -36,7 +35,7 @@ const Contribute: React.FC = () => {
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
-    await fetch(`${base_url}/api/posts/create-post`, {
+    await fetch("/api/posts/create-post", {
       method: "POST",
       headers: {
         Accept: "application/json",

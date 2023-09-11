@@ -5,7 +5,6 @@ import { FaRegComment } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { BiBookmark } from "react-icons/bi";
 import { CardProps } from "@/typescript/interfaces";
-import { base_url } from "@/constants";
 
 const Card: React.FC<CardProps> = ({
   _id,
@@ -28,7 +27,7 @@ const Card: React.FC<CardProps> = ({
       setIsClicked(true);
       setCurrentLikes((prevLikes) => prevLikes + 1);
       try {
-        const res = await fetch(`${base_url}/api/posts/${_id}`, {
+        const res = await fetch(`/api/posts/${_id}`, {
           method: "PUT",
           headers: {
             Accept: "application/json",
@@ -45,6 +44,10 @@ const Card: React.FC<CardProps> = ({
       }
     }
   }
+
+  useEffect(() => {
+    setCurrentLikes(likes);
+  }, []);
 
   return (
     <div className="p-4">
