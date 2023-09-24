@@ -1,50 +1,76 @@
 "use client";
 import Image from "next/image";
-import React, { useReducer, useState } from "react";
+import React, {  useState} from "react";
 import logo from "../public/logo.png";
 
+
 const Contribute: React.FC = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [displayImage, setDisplayImage] = useState("")
   const initialData = {
     username: "",
     location: "",
     title: "",
     description: "",
-    image: "",
     likes: 0,
   };
-  const [data, setData] = useReducer(
-    (data: any, updates: any) => ({
-      ...data,
-      ...updates,
-    }),
-    initialData
-  );
-
+  const [data, setData] = useState(initialData)
   const handleFileChange = (e: any) => {
-    const file = e?.target?.files[0];
+    const file = e?.target?.files?.[0];
     if (file) {
-      setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = () => {
-        setData({ image: reader.result });
+        setDisplayImage(reader.result as string)
       };
       reader.readAsDataURL(file);
     }
   };
+  const fileInput = document.querySelector("#image-input") as HTMLInputElement
+  const formData = new FormData()
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
+    const file = await fileInput?.files?.[0]
+    if (!file) {
+      console.error("No file selected.");
+      return;
+    }
+    formData.append("file", file);
+    console.log(file)
+    formData.append("upload_preset", "my-uploads")
+    var image = ""
+    try {
+      const response = await fetch("https://api.cloudinary.com/v1_1/dbp2wnqco/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+    
+      if (!response.ok) {
+        throw new Error(`Image upload failed: ${response.statusText}`);
+      }
+    
+      // Now, extract and parse the JSON response correctly
+      const uploadImage:any = await response.json()
+      console.log("upload image", uploadImage)
+      image = uploadImage.url
+      console.log("image url", image)
+      console.log("data", data)
+    
+      // Rest of your code here, if needed
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
     await fetch("/api/posts/create-post", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({...data, image}),
     }).then((response) => {
       console.log(response);
       setData(initialData);
+      setDisplayImage("")
       if (response.ok) {
         alert("Vas odgovor je zabelezen");
       } else {
@@ -52,9 +78,10 @@ const Contribute: React.FC = () => {
       }
     });
   };
+
   return (
-    <div className="flex justify-center lg:py-8 px-2 sm:px-16 lg:px-52 pb-8 w-full">
-      <div className="lg:w-8/12 w-full bg-white block rounded-lg px-4 py-16 sm:p-4 lg:p-16 md:border-2  shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 ">
+    <div className="flex justify-center lg:py-8 px-2 sm:px-16 lg:px-52 pb-8 w-full bg-white">
+      <div className="lg:w-8/12 w-full bg-white block rounded-lg px-4 py-16 sm:p-4 lg:p-16 md:border-2  shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
         <div className="text-center">
           <Image
             className="mx-auto"
@@ -85,7 +112,7 @@ const Contribute: React.FC = () => {
               <input
                 value={data.username}
                 onChange={(e: any) => {
-                  setData({ username: e.target.value });
+                  setData({...data, username: e.target.value });
                 }}
                 placeholder="e.g. @john.doe"
                 id="username"
@@ -107,7 +134,7 @@ const Contribute: React.FC = () => {
               <input
                 value={data.location}
                 onChange={(e: any) => {
-                  setData({ location: e.target.value });
+                  setData({...data, location: e.target.value });
                 }}
                 id="location"
                 name="location"
@@ -129,7 +156,7 @@ const Contribute: React.FC = () => {
               <input
                 value={data.title}
                 onChange={(e: any) => {
-                  setData({ title: e.target.value });
+                  setData({...data, title: e.target.value });
                 }}
                 id="title"
                 name="title"
@@ -151,7 +178,7 @@ const Contribute: React.FC = () => {
               <textarea
                 value={data.description}
                 onChange={(e: any) => {
-                  setData({ description: e.target.value });
+                  setData({...data, description: e.target.value });
                 }}
                 placeholder="e.g. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                 id="description"
@@ -171,12 +198,13 @@ const Contribute: React.FC = () => {
             <div className="mt-2">
               <div className="flex items-center justify-center w-full">
                 <label
-                  htmlFor="images"
+                  htmlFor="image-input"
                   className="flex relative flex-col items-center justify-center bg-center bg-cover w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:border-purple-400"
                 >
-                  {data.image !== "" ? (
+                  {displayImage !== "" ? 
+                  (
                     <Image
-                      src={data.image}
+                      src={displayImage}
                       fill
                       className="object-cover object-center"
                       priority
@@ -185,7 +213,7 @@ const Contribute: React.FC = () => {
                   ) : null}
                   <div
                     className={`flex flex-col items-center justify-center pt-5 pb-6 ${
-                      data.image == "" ? "" : "hidden"
+                      displayImage == "" ? "" : "hidden"
                     }`}
                   >
                     <svg
@@ -212,8 +240,8 @@ const Contribute: React.FC = () => {
                   </div>
                   <input
                     onChange={handleFileChange}
-                    id="images"
-                    name="images"
+                    id="image-input"
+                    name="image-input"
                     type="file"
                     accept="image/*"
                     className="hidden"

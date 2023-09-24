@@ -22,7 +22,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="w-full z-50">
+    <div className="w-full">
       <div
         className={`fixed top-0 text-white text-4xl flex flex-row justify-end cursor-pointer w-full py-3 z-50 ${
           isOpen && "hidden"
@@ -35,7 +35,7 @@ const Sidebar = () => {
         </button>
       </div>
       <div
-        className={`sidebar fixed top-0 bottom-0 left-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center ${
+        className={`sidebar fixed top-0 bottom-0 left-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center z-50 ${
           !isOpen && "hidden"
         }`}
         id="sidebar"

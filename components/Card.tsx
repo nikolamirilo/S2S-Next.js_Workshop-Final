@@ -5,6 +5,7 @@ import { FaRegComment } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { BiBookmark } from "react-icons/bi";
 import { CardProps } from "@/typescript/interfaces";
+import Image from "next/image";
 
 const Card: React.FC<CardProps> = ({
   _id,
@@ -61,8 +62,10 @@ const Card: React.FC<CardProps> = ({
             <span className="text-gray-600 text-xs block">{location}</span>
           </div>
         </div>
-        <img src={image} className="w-full h-56" />
-        <div className="flex items-center justify-between mx-4 mt-3 mb-2">
+        <div className="relative" style={{height: "250px", width: "350px", backgroundSize: "cover", backgroundPosition: "center"}}> 
+          <Image src={image} fill style={{objectFit: "cover"}} alt={title} />
+        </div>
+       <div className="flex items-center justify-between mx-4 mt-3 mb-2">
           <div className="flex gap-5">
             <button id="like" onClick={handleLikeClick}>
               {isClicked ? (
