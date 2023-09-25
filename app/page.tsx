@@ -1,5 +1,6 @@
 import Card from "@/components/Card";
 import { base_url } from "@/constants";
+import { Post } from "@/typescript/interfaces";
 
 async function getPosts() {
   const res = await fetch(`${base_url}/api/posts`, {
@@ -22,7 +23,7 @@ export default async function Home() {
         id="cards-container"
         className="flex flex-wrap w-fit justify-center items-center"
       >
-        {posts?.map((post: any) => {
+        {posts?.map((post: Post) => {
           return (
             <Card
               key={post._id}

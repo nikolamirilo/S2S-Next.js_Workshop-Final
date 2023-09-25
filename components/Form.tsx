@@ -1,19 +1,17 @@
 "use client";
 import Image from "next/image";
-import React, {  useState} from "react";
+import React, {  useRef, useState} from "react";
 import logo from "../public/logo.png";
 
 
 const Contribute: React.FC = () => {
   const [displayImage, setDisplayImage] = useState("")
-  const initialData = {
-    username: "",
-    location: "",
-    title: "",
-    description: "",
-    likes: 0,
-  };
-  const [data, setData] = useState(initialData)
+  const usernameInput = useRef<HTMLInputElement>(null);
+  const locationInput = useRef<HTMLInputElement>(null);
+  const titleInput = useRef<HTMLInputElement>(null);
+  const descriptionInput = useRef<HTMLTextAreaElement>(null);
+  const fileInput = useRef<HTMLInputElement>(null)
+  //Display different image every time new image is changed
   const handleFileChange = (e: any) => {
     const file = e?.target?.files?.[0];
     if (file) {
@@ -24,12 +22,11 @@ const Contribute: React.FC = () => {
       reader.readAsDataURL(file);
     }
   };
-  const fileInput = document.querySelector("#image-input") as HTMLInputElement
   const formData = new FormData()
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
-    const file = await fileInput?.files?.[0]
+    const file = await fileInput?.current?.files?.[0]
     if (!file) {
       console.error("No file selected.");
       return;
@@ -50,27 +47,39 @@ const Contribute: React.FC = () => {
     
       // Now, extract and parse the JSON response correctly
       const uploadImage:any = await response.json()
-      console.log("upload image", uploadImage)
       image = uploadImage.url
-      console.log("image url", image)
-      console.log("data", data)
-    
       // Rest of your code here, if needed
     } catch (error) {
       console.error("Error:", error);
     }
 
+    const uploadData = {
+      username: usernameInput.current!.value,
+      location: locationInput.current!.value,
+      title: titleInput.current!.value,
+      description: descriptionInput.current!.value,
+      likes: 0,
+      image: image
+    }
+
+    console.log(uploadData)
     await fetch("/api/posts/create-post", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({...data, image}),
+      body: JSON.stringify(uploadData),
     }).then((response) => {
-      console.log(response);
-      setData(initialData);
-      setDisplayImage("")
+        console.log(response);
+
+        //Set Initial data
+        usernameInput.current!.value=""
+        locationInput.current!.value=""
+        titleInput.current!.value=""
+        descriptionInput.current!.value=""
+        setDisplayImage("")
+
       if (response.ok) {
         alert("Vas odgovor je zabelezen");
       } else {
@@ -110,15 +119,11 @@ const Contribute: React.FC = () => {
             </label>
             <div className="mt-1">
               <input
-                value={data.username}
-                onChange={(e: any) => {
-                  setData({...data, username: e.target.value });
-                }}
+                ref={usernameInput}
                 placeholder="e.g. @john.doe"
                 id="username"
                 name="username"
                 type="text"
-                required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:border-purple-400 sm:text-sm"
               />
             </div>
@@ -132,15 +137,11 @@ const Contribute: React.FC = () => {
             </label>
             <div className="mt-1">
               <input
-                value={data.location}
-                onChange={(e: any) => {
-                  setData({...data, location: e.target.value });
-                }}
+                ref={locationInput}
                 id="location"
                 name="location"
                 placeholder="e.g. Budapest, Hungary"
                 type="text"
-                required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:border-purple-400 sm:text-sm"
               />
             </div>
@@ -154,15 +155,11 @@ const Contribute: React.FC = () => {
             </label>
             <div className="mt-1">
               <input
-                value={data.title}
-                onChange={(e: any) => {
-                  setData({...data, title: e.target.value });
-                }}
+                ref={titleInput}
                 id="title"
                 name="title"
-                type="text"
                 placeholder="e.g. My First Post on Instagram!"
-                required
+                type="text"
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:border-purple-400 sm:text-sm"
               />
             </div>
@@ -176,10 +173,7 @@ const Contribute: React.FC = () => {
             </label>
             <div className="mt-1">
               <textarea
-                value={data.description}
-                onChange={(e: any) => {
-                  setData({...data, description: e.target.value });
-                }}
+                ref={descriptionInput}
                 placeholder="e.g. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
                 id="description"
                 name="description"
@@ -241,6 +235,7 @@ const Contribute: React.FC = () => {
                   <input
                     onChange={handleFileChange}
                     id="image-input"
+                    ref={fileInput}
                     name="image-input"
                     type="file"
                     accept="image/*"

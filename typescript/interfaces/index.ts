@@ -8,3 +8,14 @@ export interface CardProps {
     image: string;
     likes: number;
   }
+
+export interface Post {
+    _id: string;
+    username: string;
+    authorImage: string;
+    location: string;
+    title: string;
+    description: string;
+    image: string;
+    likes: number;
+  }
