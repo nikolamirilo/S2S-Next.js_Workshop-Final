@@ -4,7 +4,7 @@ import React, {  useRef, useState} from "react";
 import logo from "../public/logo.png";
 
 
-const Contribute: React.FC = () => {
+const Form: React.FC = () => {
   const [displayImage, setDisplayImage] = useState("")
   const usernameInput = useRef<HTMLInputElement>(null);
   const locationInput = useRef<HTMLInputElement>(null);
@@ -107,7 +107,7 @@ const Contribute: React.FC = () => {
         <form
           className="mt-8 space-y-6"
           encType="multipart/form-data"
-          name="contribute"
+          name="Form"
           method="POST"
         >
           <div>
@@ -263,4 +263,4 @@ const Contribute: React.FC = () => {
   );
 };
 
-export default Contribute;
+export default Form;
