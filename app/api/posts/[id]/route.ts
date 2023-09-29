@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSinglePost, updatePost } from "@/utils/posts";
+
+export const revalidate = 0;
  
 export async function GET() {
   return NextResponse.json("This is GET Single Post" )
