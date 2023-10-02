@@ -7,6 +7,9 @@ import { BiBookmark } from "react-icons/bi";
 import { CardProps } from "@/typescript/interfaces";
 import Image from "next/image";
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 const Card: React.FC<CardProps> = ({
   _id,
   authorUsername,
@@ -30,9 +33,11 @@ const Card: React.FC<CardProps> = ({
       try {
         const res = await fetch(`/api/posts/${_id}`, {
           method: "PUT",
+
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            "Cache-Control": "no-cache, no-store",
           },
           body: JSON.stringify({
             _id: _id,
@@ -62,10 +67,18 @@ const Card: React.FC<CardProps> = ({
             <span className="text-gray-600 text-xs block">{location}</span>
           </div>
         </div>
-        <div className="relative" style={{height: "250px", width: "350px", backgroundSize: "cover", backgroundPosition: "center"}}> 
-          <Image src={image} fill style={{objectFit: "cover"}} alt={title} />
+        <div
+          className="relative"
+          style={{
+            height: "250px",
+            width: "350px",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <Image src={image} fill style={{ objectFit: "cover" }} alt={title} />
         </div>
-       <div className="flex items-center justify-between mx-4 mt-3 mb-2">
+        <div className="flex items-center justify-between mx-4 mt-3 mb-2">
           <div className="flex gap-5">
             <button id="like" onClick={handleLikeClick}>
               {isClicked ? (

@@ -2,6 +2,9 @@ import Card from "@/components/Card";
 import { base_url } from "@/constants";
 import { Post } from "@/typescript/interfaces";
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 async function getPosts() {
   const res = await fetch(`${base_url}/api/posts`, {
     cache: "no-store",
