@@ -14,7 +14,7 @@ export async function PUT(request: Request) {
     const update = await updatePost(_id, likes);
     const singlePost = getSinglePost(_id)
     if(update){
-      return NextResponse.json({message: "Successfully Updated Action",singlePost}, {status:200})
+      return NextResponse.json({message: "Successfully Updated Action",singlePost})
     }else{
       return NextResponse.json({message: "There is error inside function"}, {status:500})
     }
