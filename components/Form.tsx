@@ -1,53 +1,57 @@
 "use client";
 import Image from "next/image";
-import React, {  useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import logo from "../public/logo.png";
-
+import { CloudinaryResponse } from "@/typescript/interfaces";
 
 const Form: React.FC = () => {
-  const [displayImage, setDisplayImage] = useState("")
+  const [displayImage, setDisplayImage] = useState("");
   const usernameInput = useRef<HTMLInputElement>(null);
   const locationInput = useRef<HTMLInputElement>(null);
   const titleInput = useRef<HTMLInputElement>(null);
   const descriptionInput = useRef<HTMLTextAreaElement>(null);
-  const fileInput = useRef<HTMLInputElement>(null)
+  const fileInput = useRef<HTMLInputElement>(null);
   //Display different image every time new image is changed
-  const handleFileChange = (e: any) => {
+  const handleInputImageChange = (e: any) => {
     const file = e?.target?.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setDisplayImage(reader.result as string)
+        setDisplayImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
-  const formData = new FormData()
+
+  const formData = new FormData();
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
-    const file = await fileInput?.current?.files?.[0]
+    const file = await fileInput?.current?.files?.[0];
     if (!file) {
       console.error("No file selected.");
       return;
     }
     formData.append("file", file);
-    console.log(file)
-    formData.append("upload_preset", "my-uploads")
-    var image = ""
+    console.log(file);
+    formData.append("upload_preset", "my-uploads");
+    var image = "";
     try {
-      const response = await fetch("https://api.cloudinary.com/v1_1/dbp2wnqco/image/upload", {
-        method: "POST",
-        body: formData,
-      });
-    
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dbp2wnqco/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       if (!response.ok) {
         throw new Error(`Image upload failed: ${response.statusText}`);
       }
-    
+
       // Now, extract and parse the JSON response correctly
-      const uploadImage:any = await response.json()
-      image = uploadImage.url
+      const uploadImage: CloudinaryResponse = await response.json();
+      image = uploadImage.url;
       // Rest of your code here, if needed
     } catch (error) {
       console.error("Error:", error);
@@ -59,10 +63,10 @@ const Form: React.FC = () => {
       title: titleInput.current!.value,
       description: descriptionInput.current!.value,
       likes: 0,
-      image: image
-    }
+      image: image,
+    };
 
-    console.log(uploadData)
+    console.log(uploadData);
     await fetch("/api/posts/create-post", {
       method: "POST",
       headers: {
@@ -71,14 +75,14 @@ const Form: React.FC = () => {
       },
       body: JSON.stringify(uploadData),
     }).then((response) => {
-        console.log(response);
+      console.log(response);
 
-        //Set Initial data
-        usernameInput.current!.value=""
-        locationInput.current!.value=""
-        titleInput.current!.value=""
-        descriptionInput.current!.value=""
-        setDisplayImage("")
+      //Set Initial data
+      usernameInput.current!.value = "";
+      locationInput.current!.value = "";
+      titleInput.current!.value = "";
+      descriptionInput.current!.value = "";
+      setDisplayImage("");
 
       if (response.ok) {
         alert("Vas odgovor je zabelezen");
@@ -195,8 +199,7 @@ const Form: React.FC = () => {
                   htmlFor="image-input"
                   className="flex relative flex-col items-center justify-center bg-center bg-cover w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:border-purple-400"
                 >
-                  {displayImage !== "" ? 
-                  (
+                  {displayImage !== "" ? (
                     <Image
                       src={displayImage}
                       fill
@@ -233,7 +236,7 @@ const Form: React.FC = () => {
                     </p>
                   </div>
                   <input
-                    onChange={handleFileChange}
+                    onChange={handleInputImageChange}
                     id="image-input"
                     ref={fileInput}
                     name="image-input"

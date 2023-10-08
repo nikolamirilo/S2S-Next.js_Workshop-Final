@@ -31,8 +31,7 @@ export default async function Home() {
             <Card
               key={post._id}
               _id={post._id}
-              authorUsername={post.username}
-              authorImage="https://th.bing.com/th/id/OIP.uypTEU9uX7OgNlOI9dp-NwHaHa?pid=ImgDet&rs=1"
+              username={post.username}
               location={post.location}
               title={post.title}
               description={post.description}

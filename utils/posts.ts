@@ -1,4 +1,5 @@
 import clientPromise from "@/lib/mongodb";
+import { Post } from "@/typescript/interfaces";
 import { ObjectId } from "mongodb";
 
 
@@ -53,11 +54,11 @@ export const getAllPosts = async () => {
       return false;
     }
   };
-  export const getSinglePost= async (_id: any) => {
+  export const getSinglePost= async (_id: string) => {
     try {
       const allPosts = await getAllPosts();
-      const singlePost: any = allPosts?.find(
-        (singlePost: any) => singlePost._id.toString() == _id
+      const singlePost: Post = allPosts?.find(
+        (singlePost: Post) => singlePost._id.toString() == _id
       );
       return singlePost;
     } catch (error) {

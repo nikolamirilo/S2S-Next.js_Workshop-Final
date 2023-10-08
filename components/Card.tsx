@@ -4,16 +4,15 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { BiBookmark } from "react-icons/bi";
-import { CardProps } from "@/typescript/interfaces";
+import { Post } from "@/typescript/interfaces";
 import Image from "next/image";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
-const Card: React.FC<CardProps> = ({
+const Card: React.FC<Post> = ({
   _id,
-  authorUsername,
-  authorImage,
+  username,
   location,
   title,
   description,
@@ -59,10 +58,13 @@ const Card: React.FC<CardProps> = ({
     <div className="p-4">
       <div className="bg-white border rounded-md max-w-md">
         <div className="flex items-center px-4 py-3">
-          <img className="h-8 w-8 rounded-full" src={authorImage} />
+          <img
+            className="h-8 w-8 rounded-full"
+            src="https://th.bing.com/th/id/OIP.uypTEU9uX7OgNlOI9dp-NwHaHa?pid=ImgDet&rs=1"
+          />
           <div className="ml-3 ">
             <span className="text-sm font-semibold antialiased block leading-tight">
-              {authorUsername}
+              {username}
             </span>
             <span className="text-gray-600 text-xs block">{location}</span>
           </div>
