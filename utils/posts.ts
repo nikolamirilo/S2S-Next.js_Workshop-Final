@@ -65,3 +65,12 @@ export const getAllPosts = async () => {
       console.log((error as Error).message);
     }
   };
+  export const deleteSinglePost = async (_id: any) => {
+    try {
+      const db = await clientConnection();
+      const objId = new ObjectId(_id)
+      await db.collection("posts").deleteOne({_id: objId});
+    } catch (error) {
+      console.log((error as Error).message);
+    }
+  };

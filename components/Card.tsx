@@ -6,6 +6,7 @@ import { FiSend } from "react-icons/fi";
 import { BiBookmark } from "react-icons/bi";
 import { Post } from "@/typescript/interfaces";
 import Image from "next/image";
+import { BsTrash3 } from "react-icons/bs";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
@@ -48,13 +49,37 @@ const Card: React.FC<Post> = ({
     }
   }
 
+  const handleDeletePost = async () => {
+    try {
+      const res = await fetch(`/api/posts/${_id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache, no-store",
+        },
+      });
+      console.log(res);
+      window.location.reload();
+    } catch (error) {
+      console.log(error as Error);
+    }
+  };
+
   useEffect(() => {
     setCurrentLikes(likes);
   }, []);
 
   return (
     <div className="p-4">
-      <div className="bg-white border rounded-md max-w-md">
+      <div className="bg-white border rounded-md max-w-md relative">
+        <button
+          id="delete"
+          className="absolute right-2 p-2 rounded-full hover:bg-red-500 top-2"
+          onClick={handleDeletePost}
+        >
+          <BsTrash3 size={25} className="hover:fill-white" />
+        </button>
         <div className="flex items-center px-4 py-3">
           <img
             className="h-8 w-8 rounded-full"
