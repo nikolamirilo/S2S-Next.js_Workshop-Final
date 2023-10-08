@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
  
 export async function GET() {
   const posts  = await getAllPosts()
-  return NextResponse.json(posts)
+  return NextResponse.json(posts,{status:200})
 }
 export async function DELETE() {
   await deleteAllPosts()

@@ -54,7 +54,7 @@ export const getAllPosts = async () => {
       return false;
     }
   };
-  export const getSinglePost= async (_id: string) => {
+  export const getSinglePost= async (_id: any) => {
     try {
       const allPosts = await getAllPosts();
       const singlePost: Post = allPosts?.find(

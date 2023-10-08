@@ -32,14 +32,12 @@ const Card: React.FC<Post> = ({
       try {
         const res = await fetch(`/api/posts/${_id}`, {
           method: "PUT",
-
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
             "Cache-Control": "no-cache, no-store",
           },
           body: JSON.stringify({
-            _id: _id,
             likes: currentLikes + 1,
           }),
         });

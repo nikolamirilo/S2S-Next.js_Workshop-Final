@@ -1,28 +1,24 @@
-import { NextResponse } from 'next/server'
-import { getSinglePost, updatePost } from "@/utils/posts";
+import { NextRequest, NextResponse } from 'next/server'
+import {updatePost, getSinglePost} from "@/utils/posts";
+import { Post } from '@/typescript/interfaces';
 
-export const revalidate = 0;
-export const dynamic = "force-dynamic";
- 
-export async function GET() {
-  return NextResponse.json("This is GET Single Post" )
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  const slug = params.id
+  const singlePost: Post | undefined = await getSinglePost(slug)
+  return NextResponse.json({singlePost, message: `Successfully Found Post with id: ${slug}`}, {status:200})
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const { _id, likes} = await request.json();
-    const update = await updatePost(_id, likes);
-    const singlePost = getSinglePost(_id)
+    const slug = params.id
+    const {likes} = await request.json();
+    const update = await updatePost(slug, likes);
     if(update){
-      return NextResponse.json({message: "Successfully Updated Action",singlePost})
+      return NextResponse.json({message: "Successfully Updated Post"}, {status:200})
     }else{
       return NextResponse.json({message: "There is error inside function"}, {status:500})
     }
   } catch (error) {
     return new Response((error as Error).message);
   }
-}
- 
-export async function DELETE() {
-  return NextResponse.json("This is DELETE Single Post" )
 }
