@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 // Client
 export const clientConnection = async () => {
   const client = await clientPromise;
-  const db = client.db("Instagram");
+  const db = client.db("Instagram"); //database
   return db;
 };
 
