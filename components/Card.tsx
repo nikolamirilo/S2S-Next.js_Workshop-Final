@@ -7,9 +7,7 @@ import { BiBookmark } from "react-icons/bi";
 import { Post } from "@/typescript/interfaces";
 import Image from "next/image";
 import { BsTrash3 } from "react-icons/bs";
-
-export const revalidate = 0;
-export const dynamic = "force-dynamic";
+import { revalidateData } from "@/utils/helpers";
 
 const Card: React.FC<Post> = ({
   _id,
@@ -60,7 +58,7 @@ const Card: React.FC<Post> = ({
         },
       });
       console.log(res);
-      window.location.reload();
+      revalidateData();
     } catch (error) {
       console.log(error as Error);
     }

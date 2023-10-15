@@ -1,11 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental:{
+    serverActions: true
+  },
     images: {
-        remotePatterns: [
-          {
-            hostname: 'res.cloudinary.com'
-          },
-        ],
+        domains: ['res.cloudinary.com',"www.androidcentral.com"]
       },
 }
 module.exports = nextConfig
